@@ -28,10 +28,11 @@ class CacheRegistry:
         self.connect_signals(model)
 
     def connect_signals(self, model):
-        from .signals import clear_instance # NOQA - Prevent circular import
+        from .signals import clear_instance  # NOQA - Prevent circular import
 
         signals.post_save.connect(clear_instance, sender=model)
         signals.pre_delete.connect(clear_instance, sender=model)
+        signals.m2m_changed.connect(clear_instance, sender=model)
 
     def get(self, model):
         return self._registry.get(model, [])
